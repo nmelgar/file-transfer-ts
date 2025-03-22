@@ -1,5 +1,3 @@
-// index.ts
-
 class FileUploader {
     private dropArea: HTMLElement;
     private fileInput: HTMLInputElement;
@@ -59,33 +57,33 @@ class FileUploader {
                 body: formData,
             });
 
-            if (response.ok) {
-                // if server returns the filename in the response
-                const filename = file.name; 
-                this.displayUploadedFile(filename);
-            } else {
-                console.error('Upload failed:', response.statusText);
+            if (!response.ok) {
+                // throw an error if the response is not OK
+                throw new Error(`Upload failed with status: ${response.status}`);
             }
+
+            const filename = file.name;
+            this.displayUploadedFile(filename);
         } catch (error) {
             console.error('Upload error:', error);
+            this.displayError('File upload failed. Please try again.');
         }
     }
 
     private async fetchFiles(): Promise<void> {
         try {
             const response = await fetch('/files');
-            if (response.ok) {
-                const files: string[] = await response.json();
-                // console.log('Fetched files:', files); 
-                // clear the file list before adding new links
-                this.fileList.innerHTML = '';
-
-                files.forEach((file) => this.displayUploadedFile(file));
-            } else {
-                console.error('Failed to fetch files:', response.statusText);
+            if (!response.ok) {
+                // throw an error if the response is not OK
+                throw new Error(`Failed to fetch files: ${response.status}`);
             }
+            const files: string[] = await response.json();
+            this.fileList.innerHTML = '';
+            files.forEach((file) => this.displayUploadedFile(file));
         } catch (error) {
+            // display error on screen 
             console.error('Error fetching files:', error);
+            this.displayError('Failed to load file list.');
         }
     }
 
@@ -96,6 +94,13 @@ class FileUploader {
         fileLink.textContent = `Download: ${fileName}`;
         fileDiv.appendChild(fileLink);
         this.fileList.appendChild(fileDiv);
+    }
+
+    private displayError(errorMessage: string): void {
+        const errorDiv = document.createElement('div');
+        errorDiv.style.color = 'red';
+        errorDiv.textContent = errorMessage;
+        this.fileList.appendChild(errorDiv);
     }
 }
 
