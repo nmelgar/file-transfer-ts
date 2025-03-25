@@ -4,7 +4,7 @@ As a software engineer dedicated to expanding my expertise in modern web develop
 
 This software allows users to seamlessly upload files to a server via drag-and-drop or file selection. The application demonstrates asynchronous file uploads using the `fetch` API and provides a dynamic interface to display uploaded files as downloadable links. This project is intended to show the power of typescript in creating interactive and robust web applications.
 
-[Software Demo Video](http://)
+[Software Demo Video](https://youtu.be/oXD42-C73Wo)
 
 # Development Environment
 
